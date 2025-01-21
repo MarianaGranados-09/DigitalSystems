@@ -12,7 +12,7 @@ begin
 	Sequential: process(CLK, RST)	  
 	begin		  
 		--reseteo de entradas de los flip flops
-		if(RST = '0') 
+		if(RST = '0') then
 			flipf1 <= '0';
 			flipf2 <= '0';
 			flipf3 <= '0';
