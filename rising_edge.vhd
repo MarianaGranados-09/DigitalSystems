@@ -6,30 +6,26 @@ Entity Rising_EdgeDetec is
 	XRE: out bit);
 end Rising_EdgeDetec;
 
-Architecture Behav of Rising_EdgeDetec is 
-Signal flipf1, flipf2, flipf3: bit; 
-begin						  
-	Sequential: process(CLK, RST)	  
-	begin		  
-		--reseteo de entradas de los flip flops
-		if(RST = '0') then
-			flipf1 <= '0';
-			flipf2 <= '0';
-			flipf3 <= '0';
-		elsif 	CLK'event and CLK = '1' then
-			--mover xin a traves de los flip flops
-			--en cada ciclo de reloj ___/----\_____
-			flipf1 <= XIN;
-			flipf2 <= flipf1;
-			flipf3 <= flipf2;
-		end if;
-	end process Sequential;
+Architecture Behavioral of RisingEdge is
+
+signal Qp: bit_vector(2 downto 0);
+signal Qn: bit_vector(2 downto 0);
+begin
+	Combinational: process(Qp, Xin)
+	begin
+		Qn <= XIN & Qp(2 downto 1);
+		XRE <= Qp(2) AND Qp(1) AND (NOT (Qp(0)) );
+	end process Combinational;
 	
-	Combinational: process(XIN)
-	begin			  
-		XRE <= flipf1 AND flipf2 AND (NOT flipf3);
-	end Combinational
-end Architecture Behav;
+	Sequential: process(RST, CLK)
+	begin
+	if RST = '0' then
+		Qp <= (others => '0');
+	elsif CLK'event and CLK = '1' then
+		Qp <= Qn;
+	end if;
+	end process Sequential;
+end Behavioral;
 			
 			
 			
