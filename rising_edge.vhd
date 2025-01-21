@@ -1,4 +1,6 @@
 Entity Rising_EdgeDetec is
+	generic(
+	n : integer := 4 ); 
 	port(
 	XIN: in bit;
 	CLK: in bit;
@@ -8,13 +10,18 @@ end Rising_EdgeDetec;
 
 Architecture Behavioral of RisingEdge is
 
-signal Qp: bit_vector(2 downto 0);
-signal Qn: bit_vector(2 downto 0);
+signal Qp: bit_vector(n-1 downto 0);
+signal Qn: bit_vector(n-1 downto 0);
 begin
 	Combinational: process(Qp, Xin)
 	begin
-		Qn <= XIN & Qp(2 downto 1);
-		XRE <= Qp(2) AND Qp(1) AND (NOT (Qp(0)) );
+		Qn <= XIN & Qp(n-1 downto 1);
+		--detectar flanco asc, ultimos 3 flip flops
+		if N >= 3 then
+			XRE <= Qp(n-1) AND Qp(n-2) AND (NOT (Qp(n-3)) );
+		else --sino hay por lo menos 3 flip flops, salida = 0
+			XRE <= '0';
+		end if;
 	end process Combinational;
 	
 	Sequential: process(RST, CLK)
