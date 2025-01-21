@@ -1,4 +1,4 @@
-Entity Toggle is 
+   Entity Toggle is 
 	port(
 	TOG: in bit;
 	CLK: in bit;
@@ -10,31 +10,29 @@ end Toggle;
 Architecture Behav of Toggle is	
 Signal Qn, Qp : bit;
 begin
-	Combinational: process(TOG, Qp)
+	Combinational: process(TOG, Qp)	--el proceso combinational depende de TOG y Qp
 	begin	   
 		--Si TOG es igual a Qp, entonces xor gate es 0
-		--Qn = 0
-		if(TOG = Qp) then
-			Qn <= '0';
-		--Aqui, TOG es diferente de Qp entonces xor gate es 1
+		--Qn = 0		  
+		
+		--Si TOG es diferente a Qp, entonces xor gate 1	
 		--Qn = 1
-		else 
-			Qn <= '1';
-		end if;
+		
+		Qn <= TOG xor Qp;
+		--Asignar Qp a TGS
+		TGS <= Qp;
 	end process Combinational;
 	
-	D_FlipF: process(CLK, RST)
+	Sequential: process(CLK, RST)
 	begin		 
-		--si RST = 1, entonces resetea TGS y Qp
+		--si RST = 0, entonces resetea Qp
 		if(RST = '0') then
-			TGS <= '0';
 			Qp <= '0'; 
 		--Si hay un evento de reloj y esta en alto,
 		--Haz el cambio de TGS asigna Qn
 		--y Qp asigna Qn
 		elsif CLK'event and CLK='1' then
-			TGS <= Qn;	--value of Qn assigned to TGS
 			Qp <= Qn;	--vale of Qp assigned to Qn
 		end if;
-	end process D_FlipF;
+	end process Sequential;
 end Behav;
