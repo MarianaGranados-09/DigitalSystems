@@ -13,11 +13,11 @@ Architecture Behavioral of RisingEdge is
 signal Qp: bit_vector(n-1 downto 0);
 signal Qn: bit_vector(n-1 downto 0);
 begin
-	Combinational: process(Qp, Xin)
+	Combinational: process(Qp, XIN)
 	begin
 		Qn <= XIN & Qp(n-1 downto 1);
 		--detectar flanco asc, ultimos 3 flip flops
-		if N >= 3 then
+		if n >= 3 then
 			XRE <= Qp(n-1) AND Qp(n-2) AND (NOT (Qp(n-3)) );
 		else --sino hay por lo menos 3 flip flops, salida = 0
 			XRE <= '0';
