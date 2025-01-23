@@ -26,7 +26,7 @@ begin
 		end if;
 	end process Sequential;
 
-	Combinational: process(Cp, INC)
+	Combinational: process(Cp)
 	begin
 		if Cp = (ticks - 1) then
 			Cn <= 0;
