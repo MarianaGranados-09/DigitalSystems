@@ -1,0 +1,5 @@
+.\src\Timer.vhd
+.\src\LatchSR.vhd
+.\src\FreeCounter.vhd
+.\src\ReactionTime.vhd
+.\src\Decoder.vhd

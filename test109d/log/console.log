@@ -1,0 +1,95 @@
+# Design: Design test109d already active.
+# DESIGN: Default Design Language: VHDL
+# DESIGN: Default BDE Language: VHDL
+# DESIGN: Flow Manager: Not Defined
+acom -reorder -O3 -e 100 -work test109d -2002  $dsn/src/Timer.vhd
+# Compile Entity "Timer"
+# Compile Architecture "Behavioral" of Entity "Timer"
+# Top-level unit(s) detected:
+# Entity => Timer
+# Compile success 0 Errors 0 Warnings  Analysis time :  0.1 [s]
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+acom -O3 -e 100 -work test109d -2002  $dsn/src/LatchSR.vhd
+# Compile Entity "LatchSR"
+# Compile Architecture "Behavioral" of Entity "LatchSR"
+# Compile success 0 Errors 0 Warnings  Analysis time :  79.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/FreeCounter.vhd
+# Compile Entity "FreeCounter"
+# Compile Architecture "Behavioral" of Entity "FreeCounter"
+# Compile success 0 Errors 0 Warnings  Analysis time :  94.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/FreeCounter.vhd
+# Compile Entity "FreeCounter"
+# Compile Architecture "Behavioral" of Entity "FreeCounter"
+# Compile success 0 Errors 0 Warnings  Analysis time :  62.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/FreeCounter.vhd
+# Compile Entity "FreeCounter"
+# Compile Architecture "Behavioral" of Entity "FreeCounter"
+# Compile success 0 Errors 0 Warnings  Analysis time :  47.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/FreeCounter.vhd
+# Compile Entity "FreeCounter"
+# Compile Architecture "Behavioral" of Entity "FreeCounter"
+# Compile success 0 Errors 0 Warnings  Analysis time :  63.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/FreeCounter.vhd
+# Compile Entity "FreeCounter"
+# Compile Architecture "Behavioral" of Entity "FreeCounter"
+# Compile success 0 Errors 0 Warnings  Analysis time :  78.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/ReactionTime.vhd
+# Error: COMP96_0010: ReactionTime.vhd : (41, 15): Invalid literal.
+# Compile Entity "ReactionTime"
+# Error: COMP96_0018: ReactionTime.vhd : (11, 2): Identifier expected.
+# Compile Architecture "Structural" of Entity "ReactionTime"
+# Error: COMP96_0019: ReactionTime.vhd : (38, 2): Keyword 'end' expected.
+# Error: COMP96_0018: ReactionTime.vhd : (47, 14): Identifier expected.
+# Compile failure 4 Errors 0 Warnings  Analysis time :  15.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/ReactionTime.vhd
+# Compile Entity "ReactionTime"
+# Error: COMP96_0018: ReactionTime.vhd : (11, 2): Identifier expected.
+# Compile Architecture "Structural" of Entity "ReactionTime"
+# Error: COMP96_0056: ReactionTime.vhd : (14, 1): Cannot find referenced entity declaration "ReactionTime".
+# Compile failure 2 Errors 0 Warnings  Analysis time :  0.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/ReactionTime.vhd
+# Compile Entity "ReactionTime"
+# Compile Architecture "Structural" of Entity "ReactionTime"
+# Error: COMP96_0143: ReactionTime.vhd : (57, 3): Object "LED" cannot be written.
+# Error: COMP96_0078: ReactionTime.vhd : (60, 64): Unknown identifier "timer3_out".
+# Compile failure 2 Errors 0 Warnings  Analysis time :  0.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/ReactionTime.vhd
+# Compile Entity "ReactionTime"
+# Compile Architecture "Structural" of Entity "ReactionTime"
+# Error: COMP96_0078: ReactionTime.vhd : (60, 64): Unknown identifier "timer3_out".
+# Compile failure 1 Errors 0 Warnings  Analysis time :  15.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/ReactionTime.vhd
+# Compile Entity "ReactionTime"
+# Compile Architecture "Structural" of Entity "ReactionTime"
+# Compile success 0 Errors 0 Warnings  Analysis time :  31.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/ReactionTime.vhd
+# Compile Entity "ReactionTime"
+# Compile Architecture "Structural" of Entity "ReactionTime"
+# Error: COMP96_0393: ReactionTime.vhd : (58, 24): Cannot read output : "TIMECOUT".
+# Compile failure 1 Errors 0 Warnings  Analysis time :  0.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/ReactionTime.vhd
+# Compile Entity "ReactionTime"
+# Compile Architecture "Structural" of Entity "ReactionTime"
+# Compile success 0 Errors 0 Warnings  Analysis time :  47.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/ReactionTime.vhd
+# Compile Entity "ReactionTime"
+# Compile Architecture "Structural" of Entity "ReactionTime"
+# Compile success 0 Errors 0 Warnings  Analysis time :  32.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/Decoder.vhd
+# Compile Entity "Decoder"
+# Error: COMP96_0078: Decoder.vhd : (6, 11): Unknown identifier "std_logic".
+# Error: COMP96_0064: Decoder.vhd : (6, 11): Unknown type.
+# Compile Architecture "Behavioral" of Entity "Decoder"
+# Error: COMP96_0056: Decoder.vhd : (10, 1): Cannot find referenced entity declaration "Decoder".
+# Compile failure 3 Errors 0 Warnings  Analysis time :  15.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/Decoder.vhd
+# Compile Entity "Decoder"
+# Error: COMP96_0090: Decoder.vhd : (8, 20): Expected array type.
+# Compile Architecture "Behavioral" of Entity "Decoder"
+# Error: COMP96_0056: Decoder.vhd : (12, 1): Cannot find referenced entity declaration "Decoder".
+# Compile failure 2 Errors 0 Warnings  Analysis time :  16.0 [ms]
+acom -O3 -e 100 -work test109d -2002  $dsn/src/Decoder.vhd
+# Compile Entity "Decoder"
+# Compile Architecture "Behavioral" of Entity "Decoder"
+# Compile success 0 Errors 0 Warnings  Analysis time :  47.0 [ms]

@@ -1,0 +1,1 @@
+-w -d c:/My_Designs/test109/test109d/compile -s c:/My_Designs/test109/library.cfg -j c:/My_Designs/test109/test109d/projlib.cfg -work test109d -O3 -e 100 -work test109d -2002 c:/My_Designs/test109/test109d/src/Decoder.vhd 
