@@ -6,7 +6,7 @@ Entity AsyncTrans is
 	CLK: in std_logic;
 	RST: in std_logic;
 	STR: in std_logic;
-	--DIN: in std_logic_vector(7 downto 0);
+	DIN: in std_logic_vector(7 downto 0);
 	RDY: out std_logic;
 	TXD: out std_logic
 	);
@@ -76,7 +76,8 @@ signal EOC: std_logic := '0';
 signal STR_signal: std_logic := '0';
 signal STR_RE: std_logic := '0';	  
 signal STR_signal_not: std_logic := '0';	
-signal DIN : std_logic_vector(7 downto 0) := "01111011";
+--signal DIN : std_logic_vector(7 downto 0) := "01111011";
+signal din_not: std_logic_vector(7 downto 0);
 
 signal DIN_signal : std_logic_vector(8 downto 0) := (others => '0');
 
@@ -95,8 +96,9 @@ begin
 	U03_1: Serializer generic map(BusWidth => 9) port map(CLK, RST, DIN_signal, STR_signal, SYN, TXD); 
 	U04: RisingEdge generic map(n => 4) port map(CLK, RST, STR_signal_not, STR_RE);
 	
-	--DIN <= testdin;
-	DIN_signal <= DIN & '0';
+	--DIN <= testdin;  
+	din_not <= not(DIN);
+	DIN_signal <= din_not & '0';
 	--STR_signal <= not(STR_RE) and not(ENA);   
 	STR_signal <= STR_RE and not(ENA);
 	STR_signal_not <= not(STR);
