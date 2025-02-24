@@ -6,7 +6,7 @@ Entity AsyncTrans is
 	CLK: in std_logic;
 	RST: in std_logic;
 	STR: in std_logic;
-	DIN: in std_logic_vector(7 downto 0);
+	--DIN: in std_logic_vector(7 downto 0);
 	RDY: out std_logic;
 	TXD: out std_logic
 	);
@@ -74,14 +74,16 @@ signal SYN : std_logic := '0';
 signal ENA: std_logic := '0'; 
 signal EOC: std_logic := '0';  
 signal STR_signal: std_logic := '0';
-signal STR_RE: std_logic := '0';
+signal STR_RE: std_logic := '0';	  
+signal STR_signal_not: std_logic := '0';	
+signal DIN : std_logic_vector(7 downto 0) := "01111011";
 
 signal DIN_signal : std_logic_vector(8 downto 0) := (others => '0');
 
 signal rdy_signal: std_logic := '0';
 begin
 	rdy_signal <= not(ENA);
-	RDY <= rdy_signal; --0 is busy, 1 is available
+	RDY <= not(rdy_signal); --0 is busy, 1 is available
 ----Component Instantiation-----
 	U01: LatchSR port map(CLK, RST, STR_signal, EOC, ENA);	 
 	
@@ -91,10 +93,12 @@ begin
 	U02: Timer generic map(ticks => 434) port map(CLK, ENA, SYN);
 	U03: CountDown generic map(n => 10) port map(CLK, ENA, SYN, EOC);
 	U03_1: Serializer generic map(BusWidth => 9) port map(CLK, RST, DIN_signal, STR_signal, SYN, TXD); 
-	U04: RisingEdge generic map(n => 4) port map(CLK, RST, STR, STR_RE);
+	U04: RisingEdge generic map(n => 4) port map(CLK, RST, STR_signal_not, STR_RE);
 	
+	--DIN <= testdin;
 	DIN_signal <= DIN & '0';
 	--STR_signal <= not(STR_RE) and not(ENA);   
 	STR_signal <= STR_RE and not(ENA);
+	STR_signal_not <= not(STR);
 end Structural;
 	
