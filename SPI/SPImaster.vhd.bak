@@ -91,7 +91,7 @@ begin
 		U01: MAX6675 port map(CLK, RST, SYN,OPEN, MISO,CSE, SCK, db);
 		U02: BinaryToDecimal generic map(10) port map(CLK, RST, SYN, temp, ONE, TEN, HUN, THOU);
 		U03: LoadRegister generic map(16) port map(CLK, RST, SYN, db, da);
-		U04: MultiplexadoUnion generic map(10000) port map(THOU, HUN, TEN, ONE, CLK, RST, SEG, DIG);   
+		U04: MultiplexadoUnion generic map(10000) port map(ONE, TEN, HUN, THOU, CLK, RST, SEG, DIG);   
 		temp <= da(14 downto 5);
 end Structural;
 		
