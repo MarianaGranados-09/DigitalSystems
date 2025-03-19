@@ -11,7 +11,7 @@ end SineLUT;
 Architecture DataFlow of SineLUT is
 begin
 	With ANG select SIN <=
-	  	--"00000000000" when "0000000",
+	  	"00000000000" when "0000000",
 		"00010010011" when "0000001",
 		"00100100110" when "0000010",
 		"00110111000" when "0000011",

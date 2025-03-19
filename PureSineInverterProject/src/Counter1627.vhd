@@ -14,7 +14,7 @@ end Counter1627;
 --0110 0101 1010
 
 Architecture Behavioral of Counter1627 is
-signal Qp, Qn: std_logic_vector(10 downto 0);
+signal Qp, Qn: std_logic_vector(10 downto 0) := (others => '0');
 begin
 	Combinational: process(Qp, INC)
 	begin

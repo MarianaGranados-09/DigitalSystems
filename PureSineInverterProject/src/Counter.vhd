@@ -1,43 +1,40 @@
-   library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
+Library IEEE;
+Use IEEE.STD_LOGIC_1164.ALL; 
+Use IEEE.Numeric_std.all;
 
-entity Counter is
-	generic (
-		busWidth : integer := 8 
-		);
-	port (
-		CLK : in std_logic;      
-		RST : in std_logic;     
-		INC : in std_logic;      
-		CNT : out std_logic_vector(busWidth-1 downto 0) 
-		);
+Entity Counter is 
+	generic(
+		BusWidth : integer := 7
+	);
+	port(
+		CLK  : in  std_logic;  
+        RST  : in  std_logic; 
+        INC  : in  std_logic; 
+        CNT  : out std_logic_vector(buswidth - 1 downto 0)
+	);
 end Counter;
 
-architecture Behavioral of Counter is
-	signal Cp : integer := 0; -- Valor actual del contador
-	signal Cn : integer := 0; -- Valor pr?ximo del contador
-	signal Cp_unsigned : unsigned(busWidth-1 downto 0);
+Architecture Behavioral of Counter is 
+Signal Cn, Cp : std_logic_vector ( BusWidth - 1 downto 0);
 begin
-	
-	Combinational : process(Cp, INC)
+	Combinational: process (Cp, INC)
 	begin
-		if INC = '1' then
-			Cn <= Cp + 1; -- Incrementa el contador
+		if (INC = '1') then
+			Cn <= std_logic_vector(unsigned(Cp)+1);
 		else
 			Cn <= Cp; 
-		end if;	  
-		--Cp_unsigned <= to_unsigned(Cp, busWidth); -- Conversi?n de integer a unsigned
-         CNT <= std_logic_vector( to_unsigned(Cp, busWidth) );
+		end if;	
 	end process Combinational;
-	
-	Sequential : process(CLK, RST)
+
+				
+	Sequential: process (RST, CLK)
 	begin
 		if RST = '0' then
-			Cp <= 0; -- Reinicia el contador a cero
-		elsif CLK' event and CLK = '1' then
-			Cp <= Cn; -- Actualiza con el valor calculado
+			Cp <= (others => '0');
+		elsif CLK'event and CLK = '1' then
+			Cp <= Cn;
+			CNT <= Cn;
 		end if;
-	end process Sequential;	
+	end process Sequential;	 
 	
 end Behavioral;
