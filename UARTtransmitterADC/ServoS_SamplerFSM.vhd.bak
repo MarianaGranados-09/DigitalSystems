@@ -1,0 +1,183 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity ServoS_SamplerFSM is
+	port(
+		CLK	: in std_logic;
+		RST	: in std_logic;
+		SYN	: in std_logic;
+		ECV	: in std_logic;
+		EOT : in std_logic;
+		SGN : in std_logic;
+		
+		STC	: out std_logic;
+		STT	: out std_logic;
+		SEL	: out std_logic_vector(2 downto 0)
+		);
+end ServoS_SamplerFSM;
+
+architecture Behavioral of ServoS_SamplerFSM is	
+	
+	Signal Sp, Sn : std_logic_vector(3 downto 0);
+begin
+	
+	Combinational : process(Sp, ECV, EOT, SYN, SGN)
+	begin  
+		
+		case Sp is
+			--when "00000" => -- Idle State
+			--				STC <= '0';
+			--				STT <= '0';
+			--				SEL <= "000";
+			--				if STR = '1' then
+			--					Sn <= "00001";
+			--				else
+			--					Sn <= "00000";
+			--				end if;
+			
+			when "0000" => --En espera por la señal de muestreo
+				STC <= '0';
+				STT <= '0';
+				SEL <= "000";
+				if SYN = '1' then
+					Sn <= "0001";  -- 1
+				else 
+					Sn <= "0000";
+				end if;
+			
+			when "0001" => --Iniciar la BTD 
+				STC <= '1';
+				STT <= '0';
+				SEL <= "000";
+				Sn <= "0010";  -- 1
+			
+			when "0010" => --Espera por el fin de la conversion
+				STC <= '0';
+				STT <= '0';
+				SEL <= "000";
+				if ECV = '1' then
+					Sn <= "0011";  -- 3
+				else 
+					Sn <= "0010";
+				end if;	
+			
+			when "0011" => --Revisar si es un valor negativo
+				STC <= '0';
+				STT <= '0';
+				SEL <= "000";
+				if SGN = '1' then --El número es negativo
+					Sn <= "0100";  
+				else 
+					Sn <= "0110"; --El número es positivo
+				end if;	
+			
+			when "0100" => --Inicia trans del signo negativo
+				STC <= '0';
+				STT <= '1';
+				SEL <= "000";	
+				Sn <= "0101";  -- 5  
+			
+			when "0101" => --En espera del fin de la transmisión del signo
+				STC <= '0';
+				STT <= '0';
+				SEL <= "000";
+				if EOT = '1' then --Fin trans
+					Sn <= "0110"; 
+				else 
+					Sn <= "0101"; 
+				end if;		
+			
+			when "0110" => --Inicia la transm. de los millares
+				STC <= '0';
+				STT <= '1';
+				SEL <= "001";
+				Sn <= "0111";  -- 7 
+			
+			when "0111" => --En espera del fin de la transmisión
+				STC <= '0';
+				STT <= '0';
+				SEL <= "001";
+				if EOT = '1' then --Fin trans
+					Sn <= "1000"; 
+				else 
+					Sn <= "0111"; 
+				end if;		
+			
+			when "1000" => --Inicia transm. centenas
+				STC <= '0';
+				STT <= '1';
+				SEL <= "010";
+				Sn <= "1001";  -- 9
+			
+			when "1001" => --En espera del fin de la transmisión
+				STC <= '0';
+				STT <= '0';
+				SEL <= "010";
+				if EOT = '1' then --Fin trans
+					Sn <= "1010";  -- 10
+				else 
+					Sn <= "1001"; 
+				end if;		
+			
+			when "1010" => --Inicia transm. decenas
+				STC <= '0';
+				STT <= '1';
+				SEL <= "011";
+				Sn <= "1011";
+			
+			when "1011" => --En espera del fin de la transmisión
+				STC <= '0';
+				STT <= '0';
+				SEL <= "011";
+				if EOT = '1' then --Fin trans
+					Sn <= "1100"; 
+				else 
+					Sn <= "1011"; 
+				end if;		
+			
+			when "1100" => --Inicia transm. unidades	
+				STC <= '0';
+				STT <= '1';
+				SEL <= "100";
+				Sn <= "1101";  -- 13
+			
+			when "1101" => --En espera del fin de la transmisión 
+				STC <= '0';
+				STT <= '0';
+				SEL <= "100";
+				if EOT = '1' then --Fin trans
+					Sn <= "1110";-- 14
+				else 
+					Sn <= "1101"; 
+				end if;		
+			
+			when "1110" => --Inicia transm. fin de línea
+				STC <= '0';
+				STT <= '1';
+				SEL <= "101";
+				Sn <= "1111";  -- 15
+			
+			when others => --En espera del fin de la transmisión
+				STC <= '0';
+				STT <= '0';
+				SEL <= "101";
+				if EOT = '1' then
+					Sn <= "0000"; --Regresa a Idle
+				else
+					Sn <= "1111";
+				end if;
+			
+		end case;
+	end process Combinational;
+	
+	Sequential : process(RST, CLK)
+	begin		
+		if RST = '0' then
+			Sp <= (others => '0');
+		elsif CLK'event and CLK = '1' then
+			Sp <= Sn;
+		end if;
+	end process Sequential;
+	
+end Behavioral;
