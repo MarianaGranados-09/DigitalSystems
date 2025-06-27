@@ -1,0 +1,31 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity ADC_to_Amp is
+    Port (
+        adc_in : in std_logic_vector(9 downto 0);   -- Entrada ADC 10 bits
+        A_amps : out std_logic_vector(15 downto 0)
+		);
+end ADC_to_Amp;
+
+architecture behavioral of ADC_to_Amp is
+    constant x : integer := 560;   --
+    constant y : integer := 1950; -- 
+    constant z : integer := 100; -- 
+begin
+    process(adc_in)
+        variable adc_value : integer;
+        variable amps_mA : integer;
+    begin
+        adc_value := to_integer(unsigned(adc_in));
+		if adc_value >= x then
+        	amps_mA := ((adc_value - x) * y) / z;
+		--amps_mA := amps_mA + 100;
+		else
+			amps_mA := 0;
+		end if;
+        
+        A_amps <= std_logic_vector(to_unsigned(amps_mA, 16));
+    end process;
+end behavioral;

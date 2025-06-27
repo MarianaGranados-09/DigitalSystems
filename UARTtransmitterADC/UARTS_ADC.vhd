@@ -3,11 +3,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity UARTS_ADC is 
+	generic(n : integer := 16);
 	port(
 		CLK : in std_logic;	  
 		RST : in std_logic;
 		STR : in std_logic;
-		--	 : in std_logic_vector(15 downto 0);
+		--DIN	 : in std_logic_vector(9 downto 0);
+		MISO: in std_logic;
+		CSE: out std_logic;
+		SCK: out std_logic;
 		TXD : out std_logic
 		);
 end UARTS_ADC;
@@ -113,29 +117,74 @@ architecture Structural of UARTS_ADC is
 			RDY : out std_logic
 			);
 	end Component AsyncTX;
+	
+	component MCP3001_DataDisp is
+	port(
+		CLK  : in STD_LOGIC;
+		RST  : in STD_LOGIC;
+		MISO : in STD_LOGIC;
+		CSE  : out STD_LOGIC;
+		SCK  : out STD_LOGIC;  
+		ADC : out std_logic_vector(9 downto 0)
+		--TEMPS: out std_logic_vector(6 downto 0);
+		--ANO: out std_logic_vector(3 downto 0)	
+		);	
+end component; 
+
+	component ADC_to_Volts is
+    Port (
+        adc_in : in std_logic_vector(9 downto 0);   -- Entrada ADC 10 bits
+        V_volts   : out std_logic_vector(15 downto 0)  
+    );
+	end component; 
+	
+	component ADC_to_Amp is
+    Port (
+        adc_in : in std_logic_vector(9 downto 0);   -- Entrada ADC 10 bits
+        A_amps : out std_logic_vector(15 downto 0)
+		);
+	end component;
+	
+	component FiltroPromedio is
+    Port (
+        CLK     : in  std_logic;
+        RST     : in  std_logic;
+        STR     : in  std_logic; -- Trigger para tomar muestra
+        ADC_IN  : in  std_logic_vector(9 downto 0);
+        OUT_AVG : out std_logic_vector(9 downto 0)
+    );
+end component;
 	-----------------Signals declarations--------------------- 
 	Signal EOC, ENA, SYN, ECV, SGN, EOT, STC, STT: std_logic; 
 	Signal SEL : std_logic_vector(2 downto 0);
 	Signal ONE, TEN, HUN, THO : std_logic_vector(3 downto 0);
-	Signal AUX : std_logic_vector(11 downto 0);	
-	Signal VAL : std_logic_vector(11 downto 0);
+	Signal AUX : std_logic_vector(9 downto 0);	
+	Signal VAL : std_logic_vector(n-1 downto 0);
 	Signal BTS, DIG3, DIG2, DIG1, DIG0 : std_logic_vector(7 downto 0); 
 	SIGNAL STR_N: std_logic := '0';
-	SIGNAL DIN: std_logic_vector(11 downto 0);
-begin
-	DIN <= "011000011111"; --1,567
+	SIGNAL DIN: std_logic_vector(9 downto 0); 
+	
+	SIGNAL prom: std_logic_vector(9 downto 0);
+	begin
+	--DIN <= "011000011111"; --1,567
 	STR_N <= not(STR);
+	U00: MCP3001_DataDisp port map(CLK, RST, MISO, CSE, SCK, DIN);
+	--DIN <= DINs;
 	U01 : LatchSR port map(RST, CLK, STR_N, EOC, ENA);
 	U02 : TimerCircuit generic map(50000000) port map(ENA, CLK, SYN); --1ms
 	U03 : CountDown generic map(1) port map(CLK, ENA, SYN, EOC);
-	U04 : LoadRegister generic map(12) port map(CLK, RST, SYN, 	DIN, AUX);
+	U04 : LoadRegister generic map(10) port map(CLK, RST, SYN, 	DIN, AUX);
 	
 	--SGN <= AUX(15); --Signo del vector
 	SGN <= '0';
-	VAL <= AUX;
+	--VAL <= AUX; 	  
+	--U078: FiltroPromedio port map(CLK, RST, SYN, DIN, prom);
+	--VAL <= prom;
+	--U89: ADC_to_Volts port map(AUX, VAL); --para calcular el voltaje en mV a partir de valor de adc 
+	U88: ADC_to_Amp port map(AUX, VAL); --para calcular el voltaje en mV a partir de valor de adc
 	
 	U05 : ServoS_SamplerFSM port map (CLK, RST, SYN, ECV, EOT, STC, STT, SEL);
-	U06 : BinaryToDecimal generic map(12) port map(CLK, RST, STC, VAL, ECV, ONE, TEN, HUN, THO); 
+	U06 : BinaryToDecimal generic map(n) port map(CLK, RST, STC, VAL, ECV, ONE, TEN, HUN, THO); 
 	
 	U07 : Decimal_to_ASCII port map(ONE, TEN, HUN, THO, DIG0, DIG1, DIG2, DIG3);
 	
